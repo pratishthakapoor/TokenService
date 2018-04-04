@@ -34,6 +34,7 @@ namespace Support24
                         Images = new List<CardImage> { new CardImage("Images/icon_Hamilton_1.png") },
                         Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "await Conversation.SendAsync(activity, () => new Dialogs.RootDialog())" ) }
                     };
+                    return heroCard.ToAttachment();
                 }
                 //await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
             }
