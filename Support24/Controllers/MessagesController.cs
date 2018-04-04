@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.UI.WebControls;
 using Autofac;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Internals;
@@ -22,9 +23,19 @@ namespace Support24
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message)
+            if (activity.Type == ActivityTypes.Message || activity.Type == ActivityTypes.ConversationUpdate)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                if(activity.Type == ActivityTypes.ConversationUpdate && !activity.MembersAdded.Any(r => r.Name == "Bot"))
+                {
+                    var heroCard = new ThumbnailCard
+                    {
+                        Title = "Support 24/7 ",
+                        Text = "Welcome to Support 24/7 bot that provides solution to all your incident token",
+                        Images = new List<CardImage> { new CardImage("Images/icon_Hamilton_1.png") },
+                        Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "await Conversation.SendAsync(activity, () => new Dialogs.RootDialog())" ) }
+                    };
+                }
+                //await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
             }
             else
             {
@@ -46,40 +57,7 @@ namespace Support24
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
-                IConversationUpdateActivity update = message;
-                using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, message))
-                {
-                    //var client = scope.Resolve();
-                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
-                    if (update.MembersAdded.Any())
-                    {
-                        var replyNow = message.CreateReply();
-                        foreach (var newMember in update.MembersAdded)
-                        {
-                            if (newMember.Id != message.Recipient.Id)
-                            {
-                                List<CardImage> cardImages = new List< CardImage>();
-                                string strCurrentURL = this.Url.Request.RequestUri.AbsoluteUri.Replace(@"/api/messages", "");
-                                string imageURL = String.Format(@"{0}/{1}", strCurrentURL, "Images/support_bot_icon");
-                                cardImages.Add(new CardImage(url: imageURL));
-                                string subtitle = "";
-                                subtitle = @"Welcome!";
-                                HeroCard plCard = new HeroCard()
-                                {
-                                    Title = "HHHHH",
-                                    Subtitle = subtitle,
-                                    Images = cardImages,
-                                    Buttons = null
-                                };
-                                Attachment plAttachment = plCard.ToAttachment();
-                                List<Attachment> alist = new List<Attachment>();
-                                alist.Add(plAttachment);
-                                replyNow.Attachments = alist;
-                                connector.Conversations.ReplyToActivityAsync(replyNow);
-                            }
-                        }
-                    }
-                }
+               
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {
