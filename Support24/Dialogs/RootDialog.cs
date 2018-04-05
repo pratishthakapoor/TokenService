@@ -16,6 +16,7 @@ namespace Support24.Dialogs
     [Serializable]
     public class RootDialog : LuisDialog<object>
     {
+
        [LuisIntent("Greetings")]
        public async Task Greetings(IDialogContext context, LuisResult result)
         {
@@ -26,6 +27,10 @@ namespace Support24.Dialogs
             if(string.IsNullOrEmpty(response))
             {
                 await context.PostAsync($"I didn't understand you");
+            }
+            else if(response == "good night" || response == "bye")
+            {
+                await context.PostAsync($"{response}");
             }
             else
             {
@@ -59,7 +64,7 @@ namespace Support24.Dialogs
             {
                 await context.PostAsync($"I didn't understand you");
             }
-            else if(tokenResponse == "no")
+            else if(tokenResponse == "no" || tokenResponse == "not")
             {
                 await context.PostAsync($"Do you wish to rate us?");
             }
@@ -78,7 +83,9 @@ namespace Support24.Dialogs
             var phrases = await KeyPhraseAnalytics.ExtractPhraseAsync(phrasesString);
             string phraseResult = String.Join(",", phrases.ToArray());
 
-            await context.PostAsync($"The key phrases extracted are: {phraseResult}");
+            //await context.PostAsync($"The key phrases extracted are: {phraseResult}");
+            await context.PostAsync($"Thanks for sharing the details");
+            await context.PostAsync($"Let me check for a appropriate solution for your problem");
 
             /**
              * to call the the QnA maker knowledge base to get the appropraite response for the user queries
@@ -133,6 +140,10 @@ namespace Support24.Dialogs
             if (responseAnswers != null && responseAnswers.score >= double.Parse(ConfigurationManager.AppSettings["QnAScore"]))
             {
                 await context.PostAsync(responseAnswers.answer);
+            }
+            else
+            {
+                await context.PostAsync($"We could not find a solution for your problem. Please raise an incident ticket for this.");
             }
             //getKeyPhrases(responseAnswers)
         }
