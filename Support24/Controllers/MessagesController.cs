@@ -23,30 +23,20 @@ namespace Support24
         /// </summary>
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
-            if (activity.Type == ActivityTypes.Message || activity.Type == ActivityTypes.ConversationUpdate)
+            if (activity.Type == ActivityTypes.Message)
             {
-                if(activity.Type == ActivityTypes.ConversationUpdate && !activity.MembersAdded.Any(r => r.Name == "Bot"))
-                {
-                    var heroCard = new ThumbnailCard
-                    {
-                        Title = "Support 24/7 ",
-                        Text = "Welcome to Support 24/7 bot that provides solution to all your incident token",
-                        Images = new List<CardImage> { new CardImage("Images/icon_Hamilton_1.png") },
-                        Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Get Started", value: "await Conversation.SendAsync(activity, () => new Dialogs.RootDialog())" ) }
-                    };
-                    return heroCard.ToAttachment();
-                }
-                //await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+               
+                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
             }
             else
             {
-                HandleSystemMessage(activity);
+                HandleSystemMessageAsync(activity);
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
         }
 
-        private Activity HandleSystemMessage(Activity message)
+        private async Task<Activity> HandleSystemMessageAsync(Activity message)
         {
             if (message.Type == ActivityTypes.DeleteUserData)
             {
@@ -57,8 +47,56 @@ namespace Support24
             {
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
-                // Not available in all channels
-               
+                // Not available in all channel
+                    IConversationUpdateActivity conversationUpdateActivity = message as IConversationUpdateActivity;
+                    if(conversationUpdateActivity != null)
+                    {
+                        ConnectorClient connector = new ConnectorClient(new System.Uri(message.ServiceUrl));
+                        foreach(var member in conversationUpdateActivity.MembersAdded ?? System.Array.Empty<ChannelAccount>())
+                        {
+                            if(member.Id == conversationUpdateActivity.Recipient.Id)
+                            {
+                                var reply = ((Activity)conversationUpdateActivity).CreateReply($"Welcome to Support 24/7. Please enter Hi to get started");
+                                await connector.Conversations.ReplyToActivityAsync(reply);
+                            }
+                        }
+                    }
+
+                /*IConversationUpdateActivity update = message;
+                using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, message))
+                {
+                    //var client = scope.Resolve();
+                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
+                    if (update.MembersAdded.Any())
+                    {
+                        var replyNow = message.CreateReply();
+                        foreach (var newMember in update.MembersAdded)
+                        {
+                            if (newMember.Id != message.Recipient.Id)
+                            {
+                                List<CardImage> cardImages = new List<CardImage>();
+                                string strCurrentURL = this.Url.Request.RequestUri.AbsoluteUri.Replace(@"/api/messages", "");
+                                string imageURL = String.Format(@"{0}/{1}", strCurrentURL, "Images/icon_Hamilton_1.png");
+                                cardImages.Add(new CardImage(url: imageURL));
+                                string subtitle = "";
+                                subtitle = @"Welcome!";
+                                HeroCard plCard = new HeroCard()
+                                {
+                                    Title = "HHHHH",
+                                    Subtitle = subtitle,
+                                    Images = cardImages,
+                                    Buttons = null
+                                };
+                                Attachment plAttachment = plCard.ToAttachment();
+                                List<Attachment> alist = new List<Attachment>();
+                                alist.Add(plAttachment);
+                                replyNow.Attachments = alist;
+                                connector.Conversations.ReplyToActivityAsync(replyNow);
+                            }
+                        }
+                    }
+                }*/
+
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {

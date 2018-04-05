@@ -113,11 +113,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="SentimentAnalysis\Exceptions\DocumentCollectionMaxDocumentException.cs" />
+    <Compile Include="SentimentAnalysis\Exceptions\DocumentCollectionMaxSizeException.cs" />
+    <Compile Include="SentimentAnalysis\Exceptions\DocumentCollectionMinDocumentException.cs" />
+    <Compile Include="SentimentAnalysis\DocumentError.cs" />
+    <Compile Include="SentimentAnalysis\Document.cs" />
+    <Compile Include="SentimentAnalysis\Exceptions\DocumentIdRequiredException.cs" />
+    <Compile Include="SentimentAnalysis\Exceptions\DocumentMaxSizeException.cs" />
+    <Compile Include="SentimentAnalysis\Exceptions\DocumentMinSizeException.cs" />
+    <Compile Include="SentimentAnalysis\IDocument.cs" />
+    <Compile Include="KeyPhraseExtraction\KeyPhraseAnalytics.cs" />
+    <Compile Include="KeyPhraseExtraction\KeyPhraseClient.cs" />
+    <Compile Include="KeyPhraseExtraction\KeyPhraseDocument.cs" />
+    <Compile Include="KeyPhraseExtraction\KeyPhraseDocumentResult.cs" />
+    <Compile Include="KeyPhraseExtraction\KeyPhrasesRequest.cs" />
+    <Compile Include="KeyPhraseExtraction\KeyPhrasesResponse.cs" />
+    <Compile Include="SentimentAnalysis\TextClient.cs" />
+    <Compile Include="SentimentAnalysis\TextRequest.cs" />
+    <Compile Include="Models\TokenModel.cs" />
+    <Compile Include="Internals\Constants.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Internals\Responses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -146,7 +166,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3979</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
