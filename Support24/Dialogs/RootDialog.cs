@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
@@ -6,6 +8,7 @@ using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Sample.ProactiveBot;
+//using Microsoft.Bot.Sample.ProactiveBot;
 
 namespace Support24.Dialogs
 {
@@ -76,6 +79,62 @@ namespace Support24.Dialogs
             string phraseResult = String.Join(",", phrases.ToArray());
 
             await context.PostAsync($"The key phrases extracted are: {phraseResult}");
+
+            /**
+             * to call the the QnA maker knowledge base to get the appropraite response for the user queries
+             * **/
+            try
+            {
+                var subscriptionKey = ConfigurationManager.AppSettings["QnaSubscriptionkey"];
+                var knowledgeBaseId = ConfigurationManager.AppSettings["QnaKnowledgebaseId"];
+
+                var responseQuery = new QnAMakerDialog.QnAMakerDialog().GetQnAMakerResponse(phraseResult, subscriptionKey, knowledgeBaseId);
+
+                var responseAnswers = responseQuery.answers.FirstOrDefault();
+
+                //if-else-if condition for checking the knowledge base
+                if(responseAnswers != null && responseAnswers.score >= double.Parse(ConfigurationManager.AppSettings["QnAScore"]))
+                {
+                    await context.PostAsync(responseAnswers.answer);
+                }
+                else if(responseAnswers !=null && responseAnswers.score < double.Parse(ConfigurationManager.AppSettings["QnAScore"]))
+                {
+                    //await context.PostAsync($"Please enter a more detailed description for the problem");
+                    PromptDialog.Text(
+                        context: context,
+                        resume: getQnAResponse,
+                        prompt: "Please enter a more detailed description for the problem",
+                        retry: "i didn't understand that. Please try again"
+                        );
+                }
+                else
+                {
+                    await context.PostAsync($"We could not find a solution for your problem. Please raise an incident ticket for this.");
+                }
+
+            }
+            
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        private async Task getQnAResponse(IDialogContext context, IAwaitable<string> result)
+        {
+            var response = await result;
+            var subscriptionKey = ConfigurationManager.AppSettings["QnaSubscriptionkey"];
+            var knowledgeBaseId = ConfigurationManager.AppSettings["QnaKnowledgebaseId"];
+
+            var responseQuery = new QnAMakerDialog.QnAMakerDialog().GetQnAMakerResponse(response, subscriptionKey, knowledgeBaseId);
+
+            var responseAnswers = responseQuery.answers.FirstOrDefault();
+            if (responseAnswers != null && responseAnswers.score >= double.Parse(ConfigurationManager.AppSettings["QnAScore"]))
+            {
+                await context.PostAsync(responseAnswers.answer);
+            }
+            //getKeyPhrases(responseAnswers)
         }
     }
 }
