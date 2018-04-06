@@ -61,42 +61,6 @@ namespace Support24
                             }
                         }
                     }
-
-                /*IConversationUpdateActivity update = message;
-                using (var scope = DialogModule.BeginLifetimeScope(Conversation.Container, message))
-                {
-                    //var client = scope.Resolve();
-                    ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
-                    if (update.MembersAdded.Any())
-                    {
-                        var replyNow = message.CreateReply();
-                        foreach (var newMember in update.MembersAdded)
-                        {
-                            if (newMember.Id != message.Recipient.Id)
-                            {
-                                List<CardImage> cardImages = new List<CardImage>();
-                                string strCurrentURL = this.Url.Request.RequestUri.AbsoluteUri.Replace(@"/api/messages", "");
-                                string imageURL = String.Format(@"{0}/{1}", strCurrentURL, "Images/icon_Hamilton_1.png");
-                                cardImages.Add(new CardImage(url: imageURL));
-                                string subtitle = "";
-                                subtitle = @"Welcome!";
-                                HeroCard plCard = new HeroCard()
-                                {
-                                    Title = "HHHHH",
-                                    Subtitle = subtitle,
-                                    Images = cardImages,
-                                    Buttons = null
-                                };
-                                Attachment plAttachment = plCard.ToAttachment();
-                                List<Attachment> alist = new List<Attachment>();
-                                alist.Add(plAttachment);
-                                replyNow.Attachments = alist;
-                                connector.Conversations.ReplyToActivityAsync(replyNow);
-                            }
-                        }
-                    }
-                }*/
-
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {
