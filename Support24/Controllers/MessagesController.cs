@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.UI.WebControls;
+using AdaptiveCards;
 using Autofac;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Internals;
@@ -56,9 +57,44 @@ namespace Support24
                         {
                             if(member.Id == conversationUpdateActivity.Recipient.Id)
                             {
-                                var reply = ((Activity)conversationUpdateActivity).CreateReply($"Welcome to Support 24/7. Please enter Hi to get started");
-                                await connector.Conversations.ReplyToActivityAsync(reply);
-                            }
+                                Activity reply = ((Activity)conversationUpdateActivity).CreateReply($"Support 24/7");
+                                //await connector.Conversations.ReplyToActivityAsync(reply);
+                                AdaptiveCard card = new AdaptiveCard();
+
+                            //Add image to the card
+                            card.Body.Add(new AdaptiveCards.Image()
+                            {
+                                Url = "C:/repos/TokenService/Support24/Images/support_bot_icon.png",
+                                Size = ImageSize.Auto,
+                                Style = ImageStyle.Normal,
+                            });
+
+                            // Add text to the card
+                            card.Body.Add(new TextBlock()
+                            {
+                                Text = "Welcome to Support 24/7",
+                                Size = TextSize.Large,
+                                Weight = TextWeight.Bolder
+                            });
+
+                            // Add text to the card
+                            card.Body.Add(new TextBlock()
+                            {
+                                Text = "Please enter Hi to get started",
+                                Size = TextSize.Large,
+                                Weight = TextWeight.Bolder
+                            });
+
+                            //Create attachment
+                            Attachment attachment = new Attachment()
+                            {
+                                ContentType = AdaptiveCard.ContentType,
+                                Content = card
+                            };
+                            reply.Attachments.Add(attachment);
+
+                            var replytoconverstaion = await connector.Conversations.SendToConversationAsync(reply);
+                        }
                         }
                     }
             }
