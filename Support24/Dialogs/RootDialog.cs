@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -19,7 +21,13 @@ namespace Support24.Dialogs
     [Serializable]
     public class RootDialog : LuisDialog<object>
     {
-       
+
+        private readonly IDictionary<string, string> UserOptions = new Dictionary<string, string>
+        {
+            {"1", "Raise an incident ticket" },
+            {"2", "Restore ODB deleted files" },
+        };
+
        [LuisIntent("None")]
        [LuisIntent("")]
        public async Task EmptyResponse(IDialogContext context, LuisResult result)
@@ -89,12 +97,20 @@ namespace Support24.Dialogs
             }
             else
             {
-                //await context.PostAsync($"{response} i can raise an incident token on your behalf");
-                PromptDialog.Text(
-                    context : context,
+               await context.PostAsync($"{response}i am design to answer your queries. ");
+                PromptDialog.Choice<string>(
+                    /*context : context,
                     resume : AfterResumeMessage,
                     prompt : response + " i am design to answer your queries.\n Do you wish to raise an incident token? \n Do you want to restore the deleted files from OneDrive for business",
-                    retry : "Sorry didn't understnad that. Please try again."
+                    retry : "Sorry didn't understnad that. Please try again."*/
+                    context,
+                    this.AfterResumeMessage,
+                    this.UserOptions.Values,
+                    "Do you wish to?",
+                    "Oops, some problem occured. Please try again.",
+                    2,
+                    PromptStyle.Auto,
+                    this.UserOptions.Values
                     );
             }
         }
@@ -148,7 +164,7 @@ namespace Support24.Dialogs
             }
             else
             {
-                await context.PostAsync("So please answer some question below to find a suitable solution for you");
+                //await context.PostAsync("So please answer some question below to find a suitable solution for you");
                 try
                 {
                     string Uri = "https://s13events.azure-automation.net/webhooks?token=KABhb3NEJCq22z7v0a3%2fMR4rw0P8Qplg61B3mDMrgSk%3d";
