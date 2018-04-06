@@ -67,6 +67,7 @@ namespace Support24
                                 Url = "C:/repos/TokenService/Support24/Images/support_bot_icon.png",
                                 Size = ImageSize.Auto,
                                 Style = ImageStyle.Normal,
+                                HorizontalAlignment = HorizontalAlignment.Center
                             });
 
                             // Add text to the card
