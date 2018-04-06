@@ -3,9 +3,9 @@
     internal static class Responses
     {
         public const string Features =
-            "* Create an Virtual Machine for the user\n\n"
-            + "* Raise a Ticket\n\n"
-            + "* Allows the user to check the status of the previous ticket\n\n";
+            "* Can help you to find appropriate soultion to all your queries. \n\n";
+            //+ "* Raise a Ticket\n\n"
+            //+ "* Allows the user to check the status of the previous ticket\n\n";
 
         public const string WelcomeMessage =
             "Hi there\n\n"

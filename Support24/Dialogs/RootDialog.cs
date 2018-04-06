@@ -16,6 +16,58 @@ namespace Support24.Dialogs
     [Serializable]
     public class RootDialog : LuisDialog<object>
     {
+       
+       [LuisIntent("None")]
+       [LuisIntent("")]
+       public async Task EmptyResponse(IDialogContext context, LuisResult result)
+        {
+            string emptyResponse = null;
+            EntityRecommendation rec;
+            if (result.TryFindEntity("Null", out rec)) emptyResponse = rec.Entity;
+
+            if(string.IsNullOrEmpty(emptyResponse))
+            {
+                await context.PostAsync($"I didn't understand you");
+            }
+            else
+            {
+                await context.PostAsync($"Please enter valid response");
+            }
+        }
+       
+       [LuisIntent("Request")]
+       public async Task UserHelp(IDialogContext context, LuisResult result)
+        {
+            string request = null;
+            EntityRecommendation rec;
+            if (result.TryFindEntity("Help", out rec)) request = rec.Entity;
+
+            if(string.IsNullOrEmpty(request))
+            {
+                await context.PostAsync($"I didn't undestand you");
+            }
+            else
+            {
+                await context.PostAsync(Responses.HelpMessage);
+            }
+        }
+       
+        [LuisIntent("Response")]
+        public async Task UserResponse(IDialogContext context, LuisResult result)
+        {
+            string userResponse = null;
+            EntityRecommendation rec;
+            if (result.TryFindEntity("Message", out rec)) userResponse = rec.Entity;
+
+            if(string.IsNullOrEmpty(userResponse))
+            {
+                await context.PostAsync($"I didn't inderstand you");
+            }
+            else
+            {
+                await context.PostAsync($"Want to restart the chat again?");
+            }
+        }
 
        [LuisIntent("Greetings")]
        public async Task Greetings(IDialogContext context, LuisResult result)
