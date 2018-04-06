@@ -21,7 +21,7 @@ namespace Support24.Dialogs
     [Serializable]
     public class RootDialog : LuisDialog<object>
     {
-
+        string JobId;
         private readonly IDictionary<string, string> UserOptions = new Dictionary<string, string>
         {
             {"1", "Raise an incident ticket" },
@@ -164,7 +164,9 @@ namespace Support24.Dialogs
             }
             else
             {
+                
                 //await context.PostAsync("So please answer some question below to find a suitable solution for you");
+                await context.PostAsync("Fine, connecting to the ODB server");
                 try
                 {
                     string Uri = "https://s13events.azure-automation.net/webhooks?token=KABhb3NEJCq22z7v0a3%2fMR4rw0P8Qplg61B3mDMrgSk%3d";
@@ -192,7 +194,8 @@ namespace Support24.Dialogs
                             {
                                 StreamReader reader = new StreamReader(stream, Encoding.UTF8);
                                 String responseString = reader.ReadToEnd();
-                                Console.WriteLine("Script Triggered" + System.DateTime.Now + "\n Job details" + responseString);
+                                //Console.WriteLine("Script Triggered" + System.DateTime.Now + "\n Job details" + responseString);
+                                JobId = responseString;
                             }
                         }
                     }, null);
@@ -200,6 +203,14 @@ namespace Support24.Dialogs
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                }
+                if (JobId != null)
+                {
+                    await context.PostAsync("All deleted files are successfully retrieved");
+                }
+                else
+                {
+                    await context.PostAsync("Please contact our helpdesk for further assistance");
                 }
             }
         }
