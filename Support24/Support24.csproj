@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="QnAMakerDialog\QnAMakerDialog.cs" />
+    <Compile Include="Runbook\RunbookAuthentication.cs" />
     <Compile Include="SentimentAnalysis\Exceptions\DocumentCollectionMaxDocumentException.cs" />
     <Compile Include="SentimentAnalysis\Exceptions\DocumentCollectionMaxSizeException.cs" />
     <Compile Include="SentimentAnalysis\Exceptions\DocumentCollectionMinDocumentException.cs" />
@@ -179,9 +180,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="QnAMaker\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

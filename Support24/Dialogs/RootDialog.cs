@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
@@ -90,7 +93,7 @@ namespace Support24.Dialogs
                 PromptDialog.Text(
                     context : context,
                     resume : AfterResumeMessage,
-                    prompt : response + " i am design to answer your queries.\n Do you wish to raise an incident token?",
+                    prompt : response + " i am design to answer your queries.\n Do you wish to raise an incident token? \n Do you want to restore the deleted files from OneDrive for business",
                     retry : "Sorry didn't understnad that. Please try again."
                     );
             }
@@ -125,6 +128,63 @@ namespace Support24.Dialogs
                 await context.PostAsync("So please answer some question below to find a suitable solution for you");
                 var tokenForm = new FormDialog<TokenModel>(new TokenModel(), TokenModel.BuildForm, FormOptions.PromptInStart);
                 context.Call(tokenForm, getKeyPhrases);
+            }
+        }
+
+        [LuisIntent("Files")]
+        public async Task RetrieveFiles(IDialogContext context, LuisResult result)
+        {
+            string tokenResponse = null;
+            EntityRecommendation rec;
+            if (result.TryFindEntity("RetrieveConfirmation", out rec)) tokenResponse = rec.Entity;
+
+            if (string.IsNullOrEmpty(tokenResponse))
+            {
+                await context.PostAsync($"I didn't understand you");
+            }
+            else if (tokenResponse == "no" || tokenResponse == "not")
+            {
+                await context.PostAsync($"Do you wish to rate us?");
+            }
+            else
+            {
+                await context.PostAsync("So please answer some question below to find a suitable solution for you");
+                try
+                {
+                    string Uri = "https://s13events.azure-automation.net/webhooks?token=KABhb3NEJCq22z7v0a3%2fMR4rw0P8Qplg61B3mDMrgSk%3d";
+
+                    HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(Uri);
+
+                    //string data = string.Empty;
+                    string data = "Hello world";
+                    request.Method = "POST";
+                    request.ContentType = "text/plain;charset=utf-8";
+                    System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+                    byte[] bytes = encoding.GetBytes(data);
+
+                    request.ContentLength = bytes.Length;
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(bytes, 0, bytes.Length);
+                    }
+
+                    request.BeginGetResponse((x) =>
+                    {
+                        using (HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(x))
+                        {
+                            using (Stream stream = response.GetResponseStream())
+                            {
+                                StreamReader reader = new StreamReader(stream, Encoding.UTF8);
+                                String responseString = reader.ReadToEnd();
+                                Console.WriteLine("Script Triggered" + System.DateTime.Now + "\n Job details" + responseString);
+                            }
+                        }
+                    }, null);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
 
