@@ -168,11 +168,11 @@ namespace Support24.Dialogs
             {
 
                 //await context.PostAsync("So please answer some question below to find a suitable solution for you");
-                /*await context.PostAsync("So please answer some question below to find a suitable solution for you");
+                await context.PostAsync("So please answer some question below to find a suitable solution for you");
                 var fileForm = new FormDialog<DeletedFileModel>(new DeletedFileModel(), DeletedFileModel.BuildForm, FormOptions.PromptInStart);
-                context.Call(fileForm, getDeletedFileDetails);*/
+                context.Call(fileForm, getDeletedFileDetails);
                 await context.PostAsync("Fine, connecting to the ODB server");
-                
+                context.Call(fileForm, getDeletedFileDetails);
             }
         }
 
@@ -185,7 +185,7 @@ namespace Support24.Dialogs
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(Uri);
 
                 //string data = string.Empty;
-                string data = "Hello world";
+                string data = "akumar25@agileconsulting.onmicrosoft.com";
                 request.Method = "POST";
                 request.ContentType = "text/plain;charset=utf-8";
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
