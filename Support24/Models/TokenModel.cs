@@ -5,7 +5,7 @@ using Microsoft.Bot.Builder.FormFlow;
 
 namespace Support24.Dialogs
 {
-    [Serializable]
+   [Serializable]
     public class TokenModel
     {
         // Prompts shown as questions to be should to the user by the form flow

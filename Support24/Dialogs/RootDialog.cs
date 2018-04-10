@@ -170,9 +170,9 @@ namespace Support24.Dialogs
                 //await context.PostAsync("So please answer some question below to find a suitable solution for you");
                 await context.PostAsync("So please answer some question below to find a suitable solution for you");
                 var fileForm = new FormDialog<DeletedFileModel>(new DeletedFileModel(), DeletedFileModel.BuildForm, FormOptions.PromptInStart);
+                //context.Call(fileForm, getDeletedFileDetails);
                 context.Call(fileForm, getDeletedFileDetails);
                 await context.PostAsync("Fine, connecting to the ODB server");
-                context.Call(fileForm, getDeletedFileDetails);
             }
         }
 
