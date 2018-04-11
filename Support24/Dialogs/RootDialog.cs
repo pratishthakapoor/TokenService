@@ -178,6 +178,7 @@ namespace Support24.Dialogs
 
         private async Task getDeletedFileDetails(IDialogContext context, IAwaitable<DeletedFileModel> result)
         {
+            var  UserResponse = await result;
             try
             {
                 string Uri = "https://s13events.azure-automation.net/webhooks?token=KABhb3NEJCq22z7v0a3%2fMR4rw0P8Qplg61B3mDMrgSk%3d";
@@ -185,7 +186,8 @@ namespace Support24.Dialogs
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(Uri);
 
                 //string data = string.Empty;
-                string data = "akumar25@agileconsulting.onmicrosoft.com";
+                //string data = "akumar25@agileconsulting.onmicrosoft";
+                string data = UserResponse.UserName;
                 request.Method = "POST";
                 request.ContentType = "text/plain;charset=utf-8";
                 System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
