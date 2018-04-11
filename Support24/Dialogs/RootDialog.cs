@@ -25,8 +25,8 @@ namespace Support24.Dialogs
         string JobId;
         private readonly IDictionary<string, string> UserOptions = new Dictionary<string, string>
         {
-            {"1", "Recurring issue with SharePoint and OneDrive" },
-            {"2", "Restore ODB deleted files" },
+            {"1", "Issue with SharePoint and OneDrive" },
+            {"2", "Restoring deleted ODB files" },
         };
 
        [LuisIntent("None")]
@@ -98,7 +98,7 @@ namespace Support24.Dialogs
             }
             else
             {
-               await context.PostAsync($"{response}i am design to answer your queries. ");
+               await context.PostAsync($"{response}, I'll be answering your queries.");
                 PromptDialog.Choice<string>(
                     /*context : context,
                     resume : AfterResumeMessage,
@@ -107,8 +107,8 @@ namespace Support24.Dialogs
                     context,
                     this.AfterResumeMessage,
                     this.UserOptions.Values,
-                    "Do you wish to?",
-                    "Oops, some problem occured. Please try again.",
+                    "What can I help you with?",
+                    "Oops, I'm facing some problems processing your query now. Please try again.",
                     2,
                     PromptStyle.Auto,
                     this.UserOptions.Values
