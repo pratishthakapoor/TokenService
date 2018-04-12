@@ -14,19 +14,14 @@ namespace Support24.Models
         [Prompt(new string[] { "Please enter your username for ODB account" })]
         public string UserName { get; set; }
 
-        /*[Prompt(new string[] { "Tell me about the issue you are facing" })]
-        public string IssueDescription { get; set; }*/
-
-        /*[Prompt(new string[] { "Please provide your email address" })]
-        public string EmailID { get; set; }*/
-        [Prompt(new string[] { "Please provide the password for the account"})]
-        public string Password { get; set; }
+        /*[Prompt(new string[] { "Please provide the password for the account"})]
+        public string Password { get; set; }*/
 
         public static IForm<DeletedFileModel> BuildForm()
         {
             return new FormBuilder<DeletedFileModel>()
             .Field(nameof(UserName))
-            .Field(nameof(Password))
+            //.Field(nameof(Password))
             .AddRemainingFields()
             .Build();
         }
