@@ -20,7 +20,30 @@ namespace Support24.Dialogs
 
             await context.PostAsync(replyMessage);
 
+            context.Wait(this.MessageRecievedAsync);
+
             context.Done(this);
+        }
+
+        private async Task MessageRecievedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
+        {
+            var message = await result;
+            if(string.IsNullOrEmpty(message.Text))
+            {
+                dynamic value = message.Value;
+                if (value == null)
+                {
+                    await context.PostAsync("Feedback not recorded");
+                }
+                else
+                {
+                    await context.PostAsync("Your response was sucessfully recorded. Thanks for your feedback");
+                }
+            }
+            else
+            {
+                await context.PostAsync("Your response was sucessfully recorded. Thanks for your feedback");
+            }
         }
 
         private Attachment CreateFeedBackForm()
@@ -62,12 +85,13 @@ namespace Support24.Dialogs
                     },
 
                 },
-                Actions = new List<ActionBase>()
+               Actions = new List<ActionBase>()
                 {
                     new SubmitAction()
                     {
                         Title = "Submit",
                         Speak = "<s>Submit</s>",
+                        DataJson = "{\"Submit\" : \"Submit\"}"
                     }
                 }
             };

@@ -169,9 +169,26 @@ namespace Support24.Dialogs
             }
         }
 
+        [LuisIntent("Form")]
+        public async Task onFormClick(IDialogContext context, LuisResult result)
+        {
+            string submitResponse = null;
+            EntityRecommendation rec;
+            if (result.TryFindEntity("Submit", out rec)) submitResponse = rec.Entity;
+
+            if (string.IsNullOrEmpty(submitResponse))
+            {
+                await context.PostAsync($"I didn't understand you");
+            }
+            else
+            {
+                await context.PostAsync("Your response was sucessfully recorded. Thanks for your feedback");
+            }
+        }
+
         private async Task FeedbackDialogComplete(IDialogContext context, IAwaitable<object> result)
         {
-            await context.PostAsync("Your responses has been recorded. Thank you for visting us.");
+            //await context.PostAsync("Your responses has been recorded. Thank you for visting us.");
             context.Done(this);
         }
 
@@ -219,6 +236,7 @@ namespace Support24.Dialogs
             else
             {
                 context.Call(new FeedbackFormDialog(), FeedbackDialogComplete);
+
             }
         }
 
