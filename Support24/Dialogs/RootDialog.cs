@@ -29,6 +29,10 @@ namespace Support24.Dialogs
             {"2", "Restoring deleted ODB files" },
         };
 
+        /**
+         * Method to handle None intent call
+         **/
+
        [LuisIntent("None")]
        [LuisIntent("")]
        public async Task EmptyResponse(IDialogContext context, LuisResult result)
@@ -47,6 +51,10 @@ namespace Support24.Dialogs
             }
         }
        
+        /**
+         * Method to handle Luis intent request 
+         **/
+
        [LuisIntent("Request")]
        public async Task UserHelp(IDialogContext context, LuisResult result)
         {
@@ -64,6 +72,10 @@ namespace Support24.Dialogs
             }
         }
        
+        /**
+         * Method to handle user generic responses like ok, hmm, fine , good
+         **/
+
         [LuisIntent("Response")]
         public async Task UserResponse(IDialogContext context, LuisResult result)
         {
@@ -80,6 +92,10 @@ namespace Support24.Dialogs
                 await context.PostAsync($"Want to restart the chat again?");
             }
         }
+        
+       /**
+        * Method to handle user greeting response like HI, Hello, good morning, good afternoon etc
+        **/
 
        [LuisIntent("Greetings")]
        public async Task Greetings(IDialogContext context, LuisResult result)
@@ -138,7 +154,12 @@ namespace Support24.Dialogs
             }
             else if(tokenResponse == "no" || tokenResponse == "not")
             {
-                await context.PostAsync($"Do you wish to rate us?");
+                PromptDialog.Text(
+                    context,
+                    this.FeedbackConfirmation,
+                    prompt: "Do you wish to rate us",
+                    retry: "Some error occured, Please try again later"
+                    );
             }
             else
             {
@@ -148,21 +169,32 @@ namespace Support24.Dialogs
             }
         }
 
+        private async Task FeedbackDialogComplete(IDialogContext context, IAwaitable<object> result)
+        {
+            await context.PostAsync("Your responses has been recorded. Thank you for visting us.");
+            context.Done(this);
+        }
+
         [LuisIntent("Files")]
         public async Task RetrieveFiles(IDialogContext context, LuisResult result)
         {
-            string tokenResponse = null;
+            string FileResponse = null;
             EntityRecommendation rec;
-            if (result.TryFindEntity("RetrieveConfirmation", out rec)) tokenResponse = rec.Entity;
+            if (result.TryFindEntity("RetrieveConfirmation", out rec)) FileResponse = rec.Entity;
 
-            if (string.IsNullOrEmpty(tokenResponse))
+            if (string.IsNullOrEmpty(FileResponse))
             {
                 await context.PostAsync($"I didn't understand you");
             }
-            else if (tokenResponse == "no" || tokenResponse == "not")
+            else if (FileResponse == "no" || FileResponse == "not")
             {
-               await context.PostAsync($"Do you wish to rate us?");
-
+                //await context.PostAsync($"Do you wish to rate us?");
+                PromptDialog.Text(
+                    context,
+                    this.FeedbackConfirmation,
+                    prompt: "Do you wish to rate us",
+                    retry: "Some error occured, Please try again later"
+                    );
             }
             else
             {
@@ -173,6 +205,20 @@ namespace Support24.Dialogs
                 //context.Call(fileForm, getDeletedFileDetails);
                 context.Call(fileForm, getDeletedFileDetails);
                 await context.PostAsync("Fine, connecting to the ODB server");
+            }
+        }
+
+        private async Task FeedbackConfirmation(IDialogContext context, IAwaitable<string> result)
+        {
+            var FileResponse = await result;
+            if (FileResponse == "no" || FileResponse == "not" || FileResponse == "nope" || FileResponse == "No" || FileResponse == "Not" || FileResponse == "Nope")
+            {
+                await context.PostAsync("Thank you for visiting us");
+                context.Done(this);
+            }
+            else
+            {
+                context.Call(new FeedbackFormDialog(), FeedbackDialogComplete);
             }
         }
 
@@ -296,6 +342,8 @@ namespace Support24.Dialogs
             {
                 await context.PostAsync($"We could not find a solution for your problem. Please raise an incident ticket for this.");
             }
+
+            context.Done(this);
             //getKeyPhrases(responseAnswers)
         }
     }
