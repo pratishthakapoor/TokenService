@@ -40,10 +40,7 @@ namespace Support24.Dialogs
                     await context.PostAsync("Your response was sucessfully recorded. Thanks for your feedback");
                 }
             }
-            else
-            {
-                await context.PostAsync("Your response was sucessfully recorded. Thanks for your feedback");
-            }
+
         }
 
         private Attachment CreateFeedBackForm()

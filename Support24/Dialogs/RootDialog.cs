@@ -189,6 +189,7 @@ namespace Support24.Dialogs
         private async Task FeedbackDialogComplete(IDialogContext context, IAwaitable<object> result)
         {
             //await context.PostAsync("Your responses has been recorded. Thank you for visting us.");
+    
             context.Done(this);
         }
 
