@@ -360,7 +360,7 @@ namespace Support24.Dialogs
                         context: context,
                         resume: getQnAResponse,
                         prompt: "Please enter a more detailed description for the problem",
-                        retry: "i didn't understand that. Please try again"
+                        retry: "I didn't understand that. Please try again"
                         );
                 }
                 else
