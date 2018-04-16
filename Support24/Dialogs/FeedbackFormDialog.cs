@@ -25,6 +25,10 @@ namespace Support24.Dialogs
             //context.Done(this);
         }
 
+        /**
+         * The MessageRecieved method is called at the time of Submit button action. When the submit button choice of adaptive card is being clicked.
+         **/
+
         private async Task MessageRecieved(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var message = await result;

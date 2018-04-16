@@ -89,15 +89,48 @@ namespace Support24.Dialogs
             }
             else
             {
-                await context.PostAsync($"Want to restart the chat again?");
+                //await context.PostAsync($"Want to restart the chat again?");
+
+                PromptDialog.Text(
+                    context,
+                    this.RequestCallHandler,
+                    prompt: "Want to restart the chat again.Please specify either Yes or No.",
+                    retry: "Oops, some problem occured"
+                    );
             }
         }
-        
-       /**
-        * Method to handle user greeting response like HI, Hello, good morning, good afternoon etc
-        **/
 
-       [LuisIntent("Greetings")]
+        /**
+         * Method to handle the user response to whether restart a chat
+         **/
+
+        private async Task RequestCallHandler(IDialogContext context, IAwaitable<string> result)
+        {
+            var RequestResult = await result;
+            if(RequestResult =="yes" || RequestResult == "Yes")
+            {
+                await context.PostAsync($"1. Want to restore deleted ODB file to your inbox \n 2. Want to raise a issue with Sharepoint and OneDrive ");
+            }
+            else if (RequestResult == "no" || RequestResult == "No")
+            {
+                PromptDialog.Text(
+                    context,
+                    this.FeedbackConfirmation,
+                    prompt: "Do you wish to rate us",
+                    retry: "Some error occured, Please try again later"
+                    );
+            }
+            else
+            {
+                await context.PostAsync("Invalid response being entered");
+            }
+        }
+
+        /**
+         * Method to handle user greeting response like HI, Hello, good morning, good afternoon etc
+         **/
+
+        [LuisIntent("Greetings")]
        public async Task Greetings(IDialogContext context, LuisResult result)
         {
             string response = null;
