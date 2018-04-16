@@ -285,6 +285,7 @@ namespace Support24.Dialogs
 
                 //string data = string.Empty;
                 //string data = "akumar25@agileconsulting.onmicrosoft";
+
                 string data = UserResponse.UserName;
                 request.Method = "POST";
                 request.ContentType = "text/plain;charset=utf-8";
@@ -337,7 +338,7 @@ namespace Support24.Dialogs
             await context.PostAsync($"Let me check for a appropriate solution for your problem");
 
             /**
-             * to call the the QnA maker knowledge base to get the appropraite response for the user queries
+             * To call the the QnA maker knowledge base to get the appropraite response for the user queries
              * **/
             try
             {
@@ -356,6 +357,7 @@ namespace Support24.Dialogs
                 else if(responseAnswers !=null && responseAnswers.score < double.Parse(ConfigurationManager.AppSettings["QnAScore"]))
                 {
                     //await context.PostAsync($"Please enter a more detailed description for the problem");
+
                     PromptDialog.Text(
                         context: context,
                         resume: getQnAResponse,
