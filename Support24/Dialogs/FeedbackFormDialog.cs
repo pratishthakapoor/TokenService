@@ -18,14 +18,14 @@ namespace Support24.Dialogs
             //Attachment attachment = null;
             replyMessage.Attachments = new List<Attachment> { CreateFeedBackForm()};
 
+            context.Wait(this.MessageRecieved);
+
             await context.PostAsync(replyMessage);
 
-            context.Wait(this.MessageRecievedAsync);
-
-            context.Done(this);
+            //context.Done(this);
         }
 
-        private async Task MessageRecievedAsync(IDialogContext context, IAwaitable<IMessageActivity> result)
+        private async Task MessageRecieved(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var message = await result;
             if(string.IsNullOrEmpty(message.Text))
@@ -40,7 +40,7 @@ namespace Support24.Dialogs
                     await context.PostAsync("Your response was sucessfully recorded. Thanks for your feedback");
                 }
             }
-
+            context.Done(this);
         }
 
         private Attachment CreateFeedBackForm()
