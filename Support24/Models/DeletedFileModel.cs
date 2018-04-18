@@ -22,7 +22,7 @@ namespace Support24.Models
         public static IForm<DeletedFileModel> BuildForm()
         {
             return new FormBuilder<DeletedFileModel>()
-            .Field(nameof(UserName), validate: ValidateUsername)
+            .Field(nameof(UserName))//validate: ValidateUsername)
             //.Field(nameof(Password))
             .AddRemainingFields()
             .Build();
