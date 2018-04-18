@@ -95,7 +95,7 @@ namespace Support24
                             reply.Attachments.Add(attachment);
 
                             var replytoconverstaion = await connector.Conversations.SendToConversationAsync(reply);
-                        }
+                            }
                         }
                     }
             }

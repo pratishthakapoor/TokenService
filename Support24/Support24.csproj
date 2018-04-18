@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Dialogs\FeedbackFormDialog.cs" />
     <Compile Include="Models\DeletedFileModel.cs" />
     <Compile Include="QnAMakerDialog\QnAMakerDialog.cs" />
     <Compile Include="Runbook\RunbookAuthentication.cs" />

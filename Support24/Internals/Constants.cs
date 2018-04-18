@@ -13,5 +13,8 @@
         // Analytics KEY to authenticate the Text analytics API
 
         public const string TEXT_ANALYTICS_ID = "6b338c677a704354b740596015ad444a";
+
+        //Wbhook URI 
+        public const string  WEBHOOK_URI = "https://s13events.azure-automation.net/webhooks?token=KABhb3NEJCq22z7v0a3%2fMR4rw0P8Qplg61B3mDMrgSk%3d";
     }
 }
