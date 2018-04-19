@@ -64,7 +64,7 @@ namespace Support24
                             //Add image to the card
                             card.Body.Add(new AdaptiveCards.Image()
                             {
-                                Url = "C:/repos/TokenService/Support24/Images/support_bot_icon.png",
+                                Url = "https://ansiblergdiag813.blob.core.windows.net/chat-bot-images/support_bot_icon.png",
                                 Size = ImageSize.Auto,
                                 Style = ImageStyle.Normal,
                                 HorizontalAlignment = HorizontalAlignment.Center
