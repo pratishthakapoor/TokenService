@@ -112,6 +112,11 @@ namespace Support24
             else if (message.Type == ActivityTypes.Typing)
             {
                 // Handle knowing tha the user is typing
+                var connectorClient = new ConnectorClient(new System.Uri(message.ServiceUrl));
+                Activity isTyping = message.CreateReply("Bot is typing...");
+                //Thread.Sleep(5000);
+                isTyping.Type = ActivityTypes.Typing;
+                await connectorClient.Conversations.ReplyToActivityAsync(isTyping);
             }
             else if (message.Type == ActivityTypes.Ping)
             {
