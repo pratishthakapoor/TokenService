@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.UI.WebControls;
@@ -26,7 +27,11 @@ namespace Support24
         {
             if (activity.Type == ActivityTypes.Message)
             {
-               
+                var connectorClient = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+                Activity isTyping = activity.CreateReply("Bot is typing...");
+                //Thread.Sleep(5000);
+                isTyping.Type = ActivityTypes.Typing;
+                await connectorClient.Conversations.ReplyToActivityAsync(isTyping);
                 await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
             }
             else
