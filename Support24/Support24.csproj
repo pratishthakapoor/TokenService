@@ -142,6 +142,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Dialogs\FeedbackFormDialog.cs" />
     <Compile Include="Dialogs\ScorableDialogs\RestoredFileScorable.cs" />
+    <Compile Include="Dialogs\ScorableDialogs\SharepointandOneDriveScorable.cs" />
     <Compile Include="Module\CancelScorable.cs" />
     <Compile Include="Module\GloabalHandleeMessage.cs" />
     <Compile Include="Models\DeletedFileModel.cs" />

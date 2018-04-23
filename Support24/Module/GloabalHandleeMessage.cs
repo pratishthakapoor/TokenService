@@ -20,18 +20,29 @@ namespace Support24
              * registering builder for CancelScrolable
              **/
 
-            /*builder
+            builder
                 .Register(c => new CancelScorable(c.Resolve<IDialogTask>()))
                 .As<IScorable<IActivity, double>>()
-                .InstancePerLifetimeScope();*/
+                .InstancePerLifetimeScope();
 
             /**
-             * Registering builder for VMConfigScroable
+             * Registering builder for RestoredScroable
              **/
 
             builder
                 .Register(c => new RestoredFileScorable(c.Resolve<IDialogTask>()))
                 .As<IScorable<IActivity, double>>()
                 .InstancePerLifetimeScope();
+
+            /**
+             * Registering builder for Sharepoint and one drive scorable
+             **/
+
+            builder
+                .Register(c => new SharepointandOneDriveScorable(c.Resolve<IDialogTask>()))
+                .As<IScorable<IActivity, double>>()
+                .InstancePerLifetimeScope();
+
         }
+    }
 }
