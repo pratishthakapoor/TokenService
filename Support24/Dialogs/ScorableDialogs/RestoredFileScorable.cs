@@ -46,7 +46,9 @@ namespace Support24.Dialogs.ScorableDialogs
             if (message != null)
             {
 
-                var ticketForm = new FormDialog<TokenModel>(new TokenModel(), TokenModel.BuildForm, FormOptions.PromptInStart);
+                //var ticketForm = new FormDialog<TokenModel>(new TokenModel(), TokenModel.BuildForm, FormOptions.PromptInStart);
+
+                var ticketForm = new RootDialog();
 
                 var interruption = ticketForm.Void<object, IMessageActivity>();
 
