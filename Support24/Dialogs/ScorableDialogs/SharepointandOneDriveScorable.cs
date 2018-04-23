@@ -45,7 +45,7 @@ namespace Support24.Dialogs.ScorableDialogs
             if (message != null)
             {
 
-                var ticketForm = new FormDialog<DeletedFileModel>(new DeletedFileModel(), DeletedFileModel.BuildForm, FormOptions.PromptInStart);
+                var ticketForm = new FormDialog<TokenModel>(new TokenModel(), TokenModel.BuildForm, FormOptions.PromptInStart);
 
                 var interruption = ticketForm.Void<object, IMessageActivity>();
 
