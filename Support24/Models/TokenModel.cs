@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Bot.Builder.FormFlow;
 
-namespace Support24.Dialogs
+namespace Support24.Models
 {
    [Serializable]
     public class TokenModel
@@ -24,7 +24,7 @@ namespace Support24.Dialogs
             return new FormBuilder<TokenModel>()
             .Field(nameof(UserName), validate: validateUser)
             .Field(nameof(IssueDescription))
-            .Field(nameof(EmailID), validate: validateEmailId)
+            .Field(nameof(EmailID))
             .AddRemainingFields()
             .Build(); 
         }
@@ -37,7 +37,7 @@ namespace Support24.Dialogs
             {
                 result.IsValid = true;
                 result.Value = emailInfo;
-                //result.Feedback = "You did not enter a valid email id";
+                result.Feedback = "You did not enter a valid email id";
             }
             else
             {
@@ -64,6 +64,7 @@ namespace Support24.Dialogs
         {
             var result = new ValidateResult();
             string usernameInfo = string.Empty;
+
             if (GetUsername((string)value, out usernameInfo))
             {
                 result.IsValid = true;

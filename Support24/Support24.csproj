@@ -175,7 +175,7 @@
     </Compile>
     <Compile Include="Internals\Responses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SnowLogger\SnowLogger.cs" />
+    <Compile Include="SnowLogger\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

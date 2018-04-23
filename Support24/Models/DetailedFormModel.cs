@@ -1,15 +1,18 @@
 ﻿using Microsoft.Bot.Builder.FormFlow;
+using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Support24.Dialogs
+namespace Support24.Models
 {
-    internal class DetailedFormModel
+    [Serializable]
+
+    public class DetailedFormModel
     {
         //Prompts for the form flow question generation
 
-        [Prompt(new string[] { "What is your name ? " })]
-        public string Name { get; set; }
+        /*[Prompt(new string[] { "What is your name ? " })]
+        public string Name { get; set; }*/
 
         /*[Prompt(new string[] { "Tell me, How can I assist you?" })]
         public string Assist { get; set; }*/
@@ -20,8 +23,8 @@ namespace Support24.Dialogs
         /*[Prompt(new string[] { "To set the priority for your ticket, tell me about how many people are affected with the problem" })]
         public string Priority { get; set; }*/
 
-        [Prompt(new string[] { "Enter your email address ? " })]
-        public string Contact { get; set; }
+        /*[Prompt(new string[] { "Enter your email address ? " })]
+        public string Contact { get; set; }*/
 
         [Prompt(new string[] { "Enter your contact number" })]
         public string PhoneContact { get; set; }
@@ -42,14 +45,14 @@ namespace Support24.Dialogs
             //Form flow builder being called
 
             return new FormBuilder<DetailedFormModel>()
-                .Field(nameof(Name), validate: ValidateNameInfo)
+                //.Field(nameof(Name), validate: ValidateNameInfo)
                 .Field(nameof(Desc))
                 .Field(nameof(ServerName)/*validate: ValidateServerInfo*/)
                 .Field(nameof(MiddlewareName), validate: ValidateMiddlewareInfo)
                 .Field(nameof(DatabaseName), validate: ValidateDatabaseInfo)
                 .Field(nameof(CategoryName))
                 //.Field(nameof(Priority))
-                .Field(nameof(Contact), validate: ValidateContactInformation)
+                //.Field(nameof(Contact), validate: ValidateContactInformation)
                 .Field(nameof(PhoneContact), validate: ValidatePhoneContact)
                 .AddRemainingFields()
                 .Message("According to the responses entered by you I have generated a statement for you that showscase you problem : " +
@@ -190,9 +193,9 @@ namespace Support24.Dialogs
             return Task.FromResult(result);
         }
 
-        private static bool DescriptionEnabled(DetailedFormModel state) =>
+        /*private static bool DescriptionEnabled(DetailedFormModel state) =>
              !string.IsNullOrWhiteSpace(state.ServerName) && !string.IsNullOrWhiteSpace(state.Name) && !string.IsNullOrWhiteSpace(state.Desc) &&
-             !string.IsNullOrWhiteSpace(state.MiddlewareName) && !string.IsNullOrWhiteSpace(state.DatabaseName);
+             !string.IsNullOrWhiteSpace(state.MiddlewareName) && !string.IsNullOrWhiteSpace(state.DatabaseName);*/
 
         private static bool GetEmailAddress(string response, out string contactInfo)
         {

@@ -14,6 +14,8 @@ using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Sample.ProactiveBot;
 using Support24.Models;
+using Support24.SnowLogger;
+
 //using Microsoft.Bot.Sample.ProactiveBot;
 
 namespace Support24.Dialogs
@@ -354,7 +356,8 @@ namespace Support24.Dialogs
                 {
                     await context.PostAsync(responseAnswers.answer);
                 }
-                else if(responseAnswers !=null && responseAnswers.score < double.Parse(ConfigurationManager.AppSettings["QnAScore"]))
+                else if(responseAnswers !=null && responseAnswers.score < double.Parse(ConfigurationManager.AppSettings["QnAScore"]) &&
+                    responseAnswers.score > 30.0)
                 {
                     //await context.PostAsync($"Please enter a more detailed description for the problem");
 
@@ -370,8 +373,8 @@ namespace Support24.Dialogs
                     await context.PostAsync($"We could not find a solution for your problem. I have raised an incident ticket for this.");
 
                     await context.PostAsync("So please answer some question below to find a suitable solution for you");
-                    var tokenForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
-                    context.Call(tokenForm, IncidentTicketGeneration);
+                    var DetailForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
+                    context.Call(DetailForm, IncidentTicketGeneration);
 
                 }
 
@@ -384,16 +387,21 @@ namespace Support24.Dialogs
 
         }
 
-        private Task IncidentTicketGeneration(IDialogContext context, IAwaitable<DetailedFormModel> result)
+        private async Task IncidentTicketGeneration(IDialogContext context, IAwaitable<DetailedFormModel> result)
         {
+
+            var sentence = await result;
 
             /**
              * Connection string for SnowIncident ticket creation.
              **/
 
             string DetailDescription = sentence.Desc + " the services are running on server " + sentence.ServerName + ", using " + sentence.DatabaseName + " database and the" + sentence.MiddlewareName + " service";
+
             String incidentNo = string.Empty;
-            incidentNo = SnowLogger.CreateIncidentServiceNow(sentence.Desc, sentence.Contact, DetailDescription, sentence.CategoryName);
+
+            incidentNo = Logger.CreateIncidentServiceNow(sentence.Desc, DetailDescription, sentence.CategoryName);
+
             Console.WriteLine(incidentNo);
             await context.PostAsync("Your ticket has been raised successfully, " + incidentNo + " your token id for the raised ticket");
             await context.PostAsync("Please keep the note of above token number. as it would be used for future references");
@@ -414,7 +422,11 @@ namespace Support24.Dialogs
             }
             else
             {
-                await context.PostAsync($"We could not find a solution for your problem. Please raise an incident ticket for this.");
+                //await context.PostAsync($"We could not find a solution for your problem. Please raise an incident ticket for this.");
+                await context.PostAsync("So please answer some question below to find a suitable solution for you");
+                var DetailForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
+                context.Call(DetailForm, IncidentTicketGeneration);
+                await context.PostAsync($"We could not find a solution for your problem. I have raised an incident ticket for this.");
             }
 
             context.Done(this);
