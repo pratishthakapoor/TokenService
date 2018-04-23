@@ -140,10 +140,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Models\DetailedFormModel.cs" />
     <Compile Include="Dialogs\FeedbackFormDialog.cs" />
     <Compile Include="Dialogs\ScorableDialogs\RestoredFileScorable.cs" />
     <Compile Include="Dialogs\ScorableDialogs\SharepointandOneDriveScorable.cs" />
-    <Compile Include="Module\CancelScorable.cs" />
+    <Compile Include="Dialogs\ScorableDialogs\CancelScorable.cs" />
     <Compile Include="Module\GloabalHandleeMessage.cs" />
     <Compile Include="Models\DeletedFileModel.cs" />
     <Compile Include="QnAMakerDialog\QnAMakerDialog.cs" />
@@ -174,6 +175,7 @@
     </Compile>
     <Compile Include="Internals\Responses.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SnowLogger\SnowLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
