@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Autofac;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Internals.Fibers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +15,19 @@ namespace Support24
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+
+            this.RegisterBotModules();
+
+        }
+
+        private void RegisterBotModules()
+        {
+            Conversation.UpdateContainer(
+               builder =>
+               {
+                   builder.RegisterModule(new ReflectionSurrogateModule());
+                   builder.RegisterModule<GloabalHandleeMessage>();
+               });
         }
     }
 }
