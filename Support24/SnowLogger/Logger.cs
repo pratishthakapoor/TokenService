@@ -13,7 +13,7 @@ namespace Support24.SnowLogger
 {
     public class Logger
     {
-        public static string CreateIncidentServiceNow(string shortDescription, string Description, string category_name)
+        public static string CreateIncidentServiceNow(string shortDescription, string category_name)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace Support24.SnowLogger
                 {
                     string Json = JsonConvert.SerializeObject(new
                     {
-                        description = Description,
+                        description = shortDescription,
                         short_description = shortDescription,
                         contact_type = "email",
                         category = category_name,

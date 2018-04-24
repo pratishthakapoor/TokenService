@@ -9,12 +9,52 @@ namespace Support24.Dialogs
     {
         private string phrasesString;
 
+        string user_category;
+        int no_of_user_impacted;
+        string impact_number;
+
         public DetailFormDialog(string phrasesString)
         {
             this.phrasesString = phrasesString;
         }
 
         public async Task StartAsync(IDialogContext context)
+        {
+            await context.PostAsync("So please answer some question below to a raise an icident ticket for you");
+
+            PromptDialog.Text(
+                context: context,
+                resume: getCategoryDetail,
+                prompt: "Please select a category(Inquiry / Help, Software, Hadware, Network, Database, None)",
+                retry: "Oops, I didn't get that. Please try again."
+                );
+        }
+
+        private async Task getCategoryDetail(IDialogContext context, IAwaitable<string> category)
+        {
+            var response = await category;
+
+            user_category = response;
+
+            string shortDescription = phrasesString;
+
+            /**
+             * Connection string for SnowIncident ticket creation.
+             **/
+
+            String incidentNo = string.Empty;
+
+            incidentNo = Logger.CreateIncidentServiceNow(shortDescription, user_category);
+
+            Console.WriteLine(incidentNo);
+            await context.PostAsync("Your ticket has been raised successfully, " + incidentNo + " your token id for the raised ticket");
+            await context.PostAsync("Please keep the note of above token number. as it would be used for future references");
+            context.Done(this);
+
+
+        }
+
+        /*public async Task StartAsync(IDialogContext context)
         {
             await context.PostAsync("So please answer some question below to a raise an icident ticket for you");
 
@@ -63,23 +103,6 @@ namespace Support24.Dialogs
 
         private async Task getCategory(IDialogContext context, IAwaitable<string> category)
         {
-            var response = await category;
-            string shortDescription = phrasesString;
-
-            string DetailDescription = shortDescription + "the services are running on server {0}, using {1} database and the {2} service";
-
-            /**
-             * Connection string for SnowIncident ticket creation.
-             **/
-
-            String incidentNo = string.Empty;
-
-            incidentNo = Logger.CreateIncidentServiceNow(shortDescription, DetailDescription, response);
-
-            Console.WriteLine(incidentNo);
-            await context.PostAsync("Your ticket has been raised successfully, " + incidentNo + " your token id for the raised ticket");
-            await context.PostAsync("Please keep the note of above token number. as it would be used for future references");
-            context.Done(this);
+        }*/
         }
-    }
 }
