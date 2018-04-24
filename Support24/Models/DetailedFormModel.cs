@@ -17,8 +17,8 @@ namespace Support24.Models
         /*[Prompt(new string[] { "Tell me, How can I assist you?" })]
         public string Assist { get; set; }*/
 
-        [Prompt(new string[] { "Give a brief description of your problem" })]
-        public string Desc { get; set; }
+        /*[Prompt(new string[] { "Give a brief description of your problem" })]
+        public string Desc { get; set; }*/
 
         /*[Prompt(new string[] { "To set the priority for your ticket, tell me about how many people are affected with the problem" })]
         public string Priority { get; set; }*/
@@ -26,8 +26,8 @@ namespace Support24.Models
         /*[Prompt(new string[] { "Enter your email address ? " })]
         public string Contact { get; set; }*/
 
-        [Prompt(new string[] { "Enter your contact number" })]
-        public string PhoneContact { get; set; }
+        /*[Prompt(new string[] { "Enter your contact number" })]
+        public string PhoneContact { get; set; }*/
 
         public string ServerName { get; set; }
 
@@ -46,14 +46,14 @@ namespace Support24.Models
 
             return new FormBuilder<DetailedFormModel>()
                 //.Field(nameof(Name), validate: ValidateNameInfo)
-                .Field(nameof(Desc))
+                //.Field(nameof(Desc))
                 .Field(nameof(ServerName)/*validate: ValidateServerInfo*/)
                 .Field(nameof(MiddlewareName), validate: ValidateMiddlewareInfo)
                 .Field(nameof(DatabaseName), validate: ValidateDatabaseInfo)
                 .Field(nameof(CategoryName))
                 //.Field(nameof(Priority))
                 //.Field(nameof(Contact), validate: ValidateContactInformation)
-                .Field(nameof(PhoneContact), validate: ValidatePhoneContact)
+                //.Field(nameof(PhoneContact), validate: ValidatePhoneContact)
                 .AddRemainingFields()
                 .Message("According to the responses entered by you I have generated a statement for you that showscase you problem : " +
                  "{Desc} running on server {ServerName}, using {DatabaseName} database and the {MiddlewareName} services used by you.")

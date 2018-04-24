@@ -370,12 +370,11 @@ namespace Support24.Dialogs
                 }
                 else
                 {
-                    await context.PostAsync($"We could not find a solution for your problem. I have raised an incident ticket for this.");
+                    
+                    //var DetailForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
+                    await context.PostAsync($"We could not find a solution for your problem");
 
-                    await context.PostAsync("So please answer some question below to find a suitable solution for you");
-                    var DetailForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
-                    context.Call(DetailForm, IncidentTicketGeneration);
-
+                    context.Call(new DetailFormDialog(phrasesString), childDialog);
                 }
 
             }
@@ -387,7 +386,12 @@ namespace Support24.Dialogs
 
         }
 
-        private async Task IncidentTicketGeneration(IDialogContext context, IAwaitable<DetailedFormModel> result)
+        private async Task childDialog(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Done(this);
+        }
+
+        /*private async Task IncidentTicketGeneration(IDialogContext context, IAwaitable<DetailedFormModel> result)
         {
 
             var sentence = await result;
@@ -396,16 +400,16 @@ namespace Support24.Dialogs
              * Connection string for SnowIncident ticket creation.
              **/
 
-            string DetailDescription = sentence.Desc + " the services are running on server " + sentence.ServerName + ", using " + sentence.DatabaseName + " database and the" + sentence.MiddlewareName + " service";
+            /*string DetailDescription = sentence + " the services are running on server " + sentence.ServerName + ", using " + sentence.DatabaseName + " database and the" + sentence.MiddlewareName + " service";
 
             String incidentNo = string.Empty;
 
-            incidentNo = Logger.CreateIncidentServiceNow(sentence.Desc, DetailDescription, sentence.CategoryName);
+            incidentNo = Logger.CreateIncidentServiceNow(sentence.phrasesString, DetailDescription, sentence.CategoryName);
 
             Console.WriteLine(incidentNo);
             await context.PostAsync("Your ticket has been raised successfully, " + incidentNo + " your token id for the raised ticket");
             await context.PostAsync("Please keep the note of above token number. as it would be used for future references");
-        }
+        }*/
 
         private async Task getQnAResponse(IDialogContext context, IAwaitable<string> result)
         {
@@ -420,14 +424,14 @@ namespace Support24.Dialogs
             {
                 await context.PostAsync(responseAnswers.answer);
             }
-            else
+            /*else
             {
                 //await context.PostAsync($"We could not find a solution for your problem. Please raise an incident ticket for this.");
                 await context.PostAsync("So please answer some question below to find a suitable solution for you");
                 var DetailForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
                 context.Call(DetailForm, IncidentTicketGeneration);
                 await context.PostAsync($"We could not find a solution for your problem. I have raised an incident ticket for this.");
-            }
+            }*/
 
             context.Done(this);
             //getKeyPhrases(responseAnswers)
