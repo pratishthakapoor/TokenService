@@ -90,14 +90,18 @@ namespace Support24.Dialogs
 
                 else if (statusDetails == "7")
                 {
-                    await context.PostAsync("Your ticket has been closed by our team");
+                    var status = "Your ticket has been closed by our team";
 
                     /**
                      * Retrieves the close_code from the SnowLogger class if the incident token is being closed
                      **/
 
                     string resolveDetails = Logger.RetrieveIncidentCloseDetails(response);
-                    await context.PostAsync("Reasons for closing the ticket: " + resolveDetails);
+                    var replyMessage = context.MakeMessage();
+                    Attachment attachment = GetReplyMessage(resolveDetails, response, status);
+                    replyMessage.Attachments = new List<Attachment> { attachment };
+                    //await context.PostAsync("Reasons for closing the ticket: " + resolveDetails);
+                    await context.PostAsync(replyMessage);
                 }
 
                 else
