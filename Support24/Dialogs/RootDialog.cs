@@ -112,7 +112,7 @@ namespace Support24.Dialogs
             var RequestResult = await result;
             if(RequestResult =="yes" || RequestResult == "Yes")
             {
-                await context.PostAsync($"1. Want to restore deleted ODB file to your inbox \n 2. Want to raise a issue with Sharepoint and OneDrive ");
+                await context.PostAsync($"1. Want to restore deleted ODB file to your inbox \n 2. Want to raise a issue with Sharepoint and OneDrive  \n 3. Want to check the status of previous ticket");
             }
             else if (RequestResult == "no" || RequestResult == "No")
             {
