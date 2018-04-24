@@ -29,19 +29,19 @@ namespace Support24
              * Registering builder for RestoredScroable
              **/
 
-            builder
+            /*builder
                 .Register(c => new RestoredFileScorable(c.Resolve<IDialogTask>()))
                 .As<IScorable<IActivity, double>>()
-                .InstancePerLifetimeScope();
+                .InstancePerLifetimeScope();*/
 
             /**
              * Registering builder for Sharepoint and one drive scorable
              **/
 
-            builder
+            /*builder
                 .Register(c => new SharepointandOneDriveScorable(c.Resolve<IDialogTask>()))
                 .As<IScorable<IActivity, double>>()
-                .InstancePerLifetimeScope();
+                .InstancePerLifetimeScope();*/
 
         }
     }

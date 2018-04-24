@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Dialogs\DetailFormDialog.cs" />
+    <Compile Include="Dialogs\GenerateStatusDialog.cs" />
     <Compile Include="Models\DetailedFormModel.cs" />
     <Compile Include="Dialogs\FeedbackFormDialog.cs" />
     <Compile Include="Dialogs\ScorableDialogs\RestoredFileScorable.cs" />

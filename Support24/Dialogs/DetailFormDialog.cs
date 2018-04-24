@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Bot.Builder.Dialogs;
+﻿using Microsoft.Bot.Builder.Dialogs;
 using Support24.SnowLogger;
+using System;
+using System.Threading.Tasks;
 
 namespace Support24.Dialogs
 {
@@ -20,9 +20,9 @@ namespace Support24.Dialogs
 
             PromptDialog.Text(
                 context,
-                resume : getServerDetails,
+                resume: getServerDetails,
                 prompt: "Which servers do you use? Please specify None if not used by you",
-                retry : "Oops, I didn't get that. Please try again"
+                retry: "Oops, I didn't get that. Please try again"
                 );
         }
 
@@ -53,12 +53,12 @@ namespace Support24.Dialogs
         private async Task getDatabaseDetails(IDialogContext context, IAwaitable<string> DatabaseDetails)
         {
             var response = await DatabaseDetails;
-             PromptDialog.Text(
-                context,
-                resume: getCategory,
-                prompt: "Please select a category(Inquiry/ Help, Software, Hadware, Network, Database)",
-                retry: "Oops, I didn't get that. Please try again"
-                );
+            PromptDialog.Text(
+               context,
+               resume: getCategory,
+               prompt: "Please select a category(Inquiry/ Help, Software, Hadware, Network, Database)",
+               retry: "Oops, I didn't get that. Please try again"
+               );
         }
 
         private async Task getCategory(IDialogContext context, IAwaitable<string> category)
@@ -67,7 +67,7 @@ namespace Support24.Dialogs
             string shortDescription = phrasesString;
 
             string DetailDescription = shortDescription + "the services are running on server {0}, using {1} database and the {2} service";
-           
+
             /**
              * Connection string for SnowIncident ticket creation.
              **/
@@ -79,7 +79,7 @@ namespace Support24.Dialogs
             Console.WriteLine(incidentNo);
             await context.PostAsync("Your ticket has been raised successfully, " + incidentNo + " your token id for the raised ticket");
             await context.PostAsync("Please keep the note of above token number. as it would be used for future references");
-            
+            context.Done(this);
         }
     }
 }

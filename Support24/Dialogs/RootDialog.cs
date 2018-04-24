@@ -29,6 +29,7 @@ namespace Support24.Dialogs
         {
             {"1", "Issue with SharePoint and OneDrive" },
             {"2", "Restoring deleted ODB files" },
+            {"3", "Check previous raised Ticket Status"},
         };
 
         /**
@@ -261,6 +262,33 @@ namespace Support24.Dialogs
             }
         }
 
+        [LuisIntent("Ticket")]
+        public async Task CheckTicketStatus(IDialogContext context, LuisResult result)
+        {
+            string FileResponse = null;
+            EntityRecommendation rec;
+            if (result.TryFindEntity("TicketStatus", out rec)) FileResponse = rec.Entity;
+
+            if (string.IsNullOrEmpty(FileResponse))
+            {
+                await context.PostAsync($"I didn't understand you");
+            }
+            else if (FileResponse == "no" || FileResponse == "not")
+            {
+                //await context.PostAsync($"Do you wish to rate us?");
+                PromptDialog.Text(
+                    context,
+                    this.FeedbackConfirmation,
+                    prompt: "Do you wish to rate us",
+                    retry: "Some error occured, Please try again later"
+                    );
+            }
+            else
+            {
+                context.Call(new GenerateStatusDialog(), childDialog);
+            }
+        }
+
         private async Task FeedbackConfirmation(IDialogContext context, IAwaitable<string> result)
         {
             var FileResponse = await result;
@@ -370,11 +398,12 @@ namespace Support24.Dialogs
                 }
                 else
                 {
-                    
-                    //var DetailForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
-                    await context.PostAsync($"We could not find a solution for your problem");
+                    await context.PostAsync($"We could not find a solution for your problem.");
 
-                    context.Call(new DetailFormDialog(phrasesString), childDialog);
+                    //await context.PostAsync("So please answer some question below to find a suitable solution for you");
+                    //var DetailForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
+                    context.Call(new DetailFormDialog(phrasesString),childDialog);
+
                 }
 
             }
@@ -400,11 +429,11 @@ namespace Support24.Dialogs
              * Connection string for SnowIncident ticket creation.
              **/
 
-            /*string DetailDescription = sentence + " the services are running on server " + sentence.ServerName + ", using " + sentence.DatabaseName + " database and the" + sentence.MiddlewareName + " service";
+            /*string DetailDescription = sentence.Desc + " the services are running on server " + sentence.ServerName + ", using " + sentence.DatabaseName + " database and the" + sentence.MiddlewareName + " service";
 
             String incidentNo = string.Empty;
 
-            incidentNo = Logger.CreateIncidentServiceNow(sentence.phrasesString, DetailDescription, sentence.CategoryName);
+            incidentNo = Logger.CreateIncidentServiceNow(sentence.Desc, DetailDescription, sentence.CategoryName);
 
             Console.WriteLine(incidentNo);
             await context.PostAsync("Your ticket has been raised successfully, " + incidentNo + " your token id for the raised ticket");
@@ -424,16 +453,20 @@ namespace Support24.Dialogs
             {
                 await context.PostAsync(responseAnswers.answer);
             }
-            /*else
+            else
             {
                 //await context.PostAsync($"We could not find a solution for your problem. Please raise an incident ticket for this.");
-                await context.PostAsync("So please answer some question below to find a suitable solution for you");
+                /*await context.PostAsync("So please answer some question below to find a suitable solution for you");
                 var DetailForm = new FormDialog<DetailedFormModel>(new DetailedFormModel(), DetailedFormModel.BuildForm, FormOptions.PromptInStart);
                 context.Call(DetailForm, IncidentTicketGeneration);
-                await context.PostAsync($"We could not find a solution for your problem. I have raised an incident ticket for this.");
-            }*/
+                await context.PostAsync($"We could not find a solution for your problem. I have raised an incident ticket for this.");*/
 
-            context.Done(this);
+                await context.PostAsync($"We could not find a solution for your problem.");
+                context.Call(new DetailFormDialog(response), childDialog);
+
+            }
+
+            //context.Done(this);
             //getKeyPhrases(responseAnswers)
         }
     }
