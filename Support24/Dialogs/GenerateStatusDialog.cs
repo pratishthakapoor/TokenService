@@ -74,14 +74,17 @@ namespace Support24.Dialogs
 
                 else if (statusDetails == "6")
                 {
-                    await context.PostAsync("Your ticket is resolved.");
+                    var status = "Your ticket is resolved.";
 
                     /**
                      * Retrieves the details from the resolve columns of SnowLogger class if the incident token is being resolved
                      **/
 
                     string resolveDetails = Logger.RetrieveIncidentResolveDetails(response);
-                    await context.PostAsync("For the ticket id " + response + " solution fetched by our team is : " + resolveDetails);
+                    var replyMessage= context.MakeMessage();
+                    Attachment attachment = GetReplyMessage(resolveDetails, response, status);
+                    replyMessage.Attachments = new List<Attachment> { attachment };
+                    await context.PostAsync(replyMessage);
                 }
 
 
