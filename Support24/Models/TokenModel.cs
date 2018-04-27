@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.FormFlow;
 
 namespace Support24.Models
 {
    [Serializable]
-    public class TokenModel
+    public class TokenModel : LuisDialog<object>
     {
         // Prompts shown as questions to be should to the user by the form flow
 
@@ -21,11 +22,17 @@ namespace Support24.Models
 
         public static IForm<TokenModel> BuildForm()
         {
+            OnCompletionAsyncDelegate<TokenModel> getKeyPhrases = async (context, state) =>
+            {
+
+            };
+
             return new FormBuilder<TokenModel>()
             .Field(nameof(UserName), validate: validateUser)
             .Field(nameof(IssueDescription))
             .Field(nameof(EmailID))
             .AddRemainingFields()
+            //.OnCompletion(getKeyPhrases)
             .Build(); 
         }
 
