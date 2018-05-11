@@ -29,8 +29,8 @@ namespace Support24
             Conversation.UpdateContainer(
                builder =>
                {
-                   /*builder.RegisterModule(new ReflectionSurrogateModule());
-                   builder.RegisterModule<GloabalHandleeMessage>();*/
+                   builder.RegisterModule(new ReflectionSurrogateModule());
+                   builder.RegisterModule<GloabalHandleeMessage>();
 
                    /*var store = new TableBotDataStore(ConfigurationManager.AppSettings["AzureWebJobsStorage"]);
 
