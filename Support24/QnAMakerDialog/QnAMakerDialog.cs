@@ -11,7 +11,7 @@ namespace QnAMakerDialog
             var responseString = String.Empty;
 
             // Build the URI
-            var builder = new UriBuilder($"https://westus.api.cognitive.microsoft.com/qnamaker/v2.0/knowledgebases/{knowledgeBaseId}/generateAnswer");
+            var builder = new UriBuilder($"https://supportservice.azurewebsites.net/v4.0/qnamaker/knowledgebases/{knowledgeBaseId}/generateAnswer");
 
             //Add the question as part of the body
 
@@ -24,9 +24,10 @@ namespace QnAMakerDialog
                 client.Encoding = System.Text.Encoding.UTF8;
 
                 //Add the subscription key header
-                client.Headers.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+                //client.Headers.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
+                client.Headers.Add("Authorization", subscriptionKey);
                 client.Headers.Add("Content-Type", "application/json");
-                responseString = client.UploadString(builder.Uri, postBody);
+                 responseString = client.UploadString(builder.Uri, postBody);
             }
 
             //De-serilaize the response 
