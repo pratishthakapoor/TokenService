@@ -37,7 +37,7 @@ namespace Support24.Models
         [Prompt(new string[] { "Which database are used by you ? " })]
         public string DatabaseName { get; set; }
 
-        [Prompt(new string[] { "Please select a category (Inquiry/Help, Software, Hadware, Network, Database)" })]
+        [Prompt(new string[] { "Please select a category (Inquiry, Software, Hadware, Network, Database)" })]
         public string CategoryName { get; set; }
 
         public static IForm<DetailedFormModel> BuildForm()
