@@ -10,8 +10,8 @@ namespace Support24.Dialogs
         private string phrasesString;
 
         string user_category;
-        /*int no_of_user_impacted;
-        string impact_number;*/
+        int no_of_user_impacted;
+        string impact_number;
 
         public DetailFormDialog(string phrasesString)
         {

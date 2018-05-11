@@ -20,10 +20,10 @@ namespace Support24
              * registering builder for CancelScrolable
              **/
 
-            /*builder
+            builder
                 .Register(c => new CancelScorable(c.Resolve<IDialogTask>()))
                 .As<IScorable<IActivity, double>>()
-                .InstancePerLifetimeScope();*/
+                .InstancePerLifetimeScope();
 
             /**
              * Registering builder for RestoredScroable
