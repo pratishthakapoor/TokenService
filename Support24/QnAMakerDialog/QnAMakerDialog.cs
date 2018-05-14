@@ -11,11 +11,16 @@ namespace QnAMakerDialog
             var responseString = String.Empty;
 
             // Build the URI
-            var builder = new UriBuilder($"https://supportservice.azurewebsites.net/v4.0/qnamaker/knowledgebases/{knowledgeBaseId}/generateAnswer");
+            var builder = new UriBuilder($"https://supportservice.azurewebsites.net/qnamaker/knowledgebases/" + knowledgeBaseId + "/generateAnswer/");
 
             //Add the question as part of the body
 
             var postBody = $"{{\"question\": \"{query}\"}}";
+
+            /*string postBody = @"
+            {
+              'question' :  + query
+            }";*/
 
             // Send the POST request
             using (WebClient client = new WebClient())
@@ -25,7 +30,7 @@ namespace QnAMakerDialog
 
                 //Add the subscription key header
                 //client.Headers.Add("Ocp-Apim-Subscription-Key", subscriptionKey);
-                client.Headers.Add("Authorization", subscriptionKey);
+                client.Headers.Add("Authorization", "EndpointKey "+subscriptionKey);
                 client.Headers.Add("Content-Type", "application/json");
                  responseString = client.UploadString(builder.Uri, postBody);
             }
